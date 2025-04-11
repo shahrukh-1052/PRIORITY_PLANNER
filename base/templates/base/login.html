@@ -1,0 +1,121 @@
+<!-- templates/base/login.html -->
+{% extends 'base/main.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .form-container {
+        max-width: 400px;
+        margin: 60px auto;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 16px rgba(0, 188, 212, 0.2);
+    }
+
+    .form-container h2 {
+        text-align: center;
+        color: #00acc1;
+        margin-bottom: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 15px;
+        box-sizing: border-box;
+    }
+
+    .toggle-text {
+        position: absolute;
+        top: 36px;
+        right: 14px;
+        font-size: 13px;
+        color: #00acc1;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .login-btn {
+        width: 100%;
+        padding: 12px;
+        background-color: #00bcd4;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .login-btn:hover {
+        background-color: #008ba3;
+    }
+
+    .register-link {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 14px;
+    }
+
+    .register-link a {
+        color: #00acc1;
+    }
+
+    .register-link a:hover {
+        color: #007b8a;
+    }
+</style>
+
+<div class="form-container">
+    <h2>Login</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.username.id_for_label }}">Username</label>
+            {{ form.username }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.password.id_for_label }}">Password</label>
+            {{ form.password }}
+            <span class="toggle-text" onclick="togglePassword()">Show</span>
+        </div>
+
+        <button type="submit" class="login-btn">Login</button>
+    </form>
+
+    <div class="register-link">
+        Don’t have an account? <a href="{% url 'register' %}">Register</a>
+    </div>
+</div>
+
+<script>
+    function togglePassword() {
+        const pwdInput = document.getElementById("id_password");
+        const toggle = document.querySelector(".toggle-text");
+
+        if (pwdInput.type === "password") {
+            pwdInput.type = "text";
+            toggle.textContent = "Hide";
+        } else {
+            pwdInput.type = "password";
+            toggle.textContent = "Show";
+        }
+    }
+</script>
+{% endblock %}

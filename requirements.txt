@@ -1,0 +1,3 @@
+Django
+psycopg2-binary  # For PostgreSQL support
+gunicorn         # For running Django on Vercel
