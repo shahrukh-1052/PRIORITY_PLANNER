@@ -16,7 +16,7 @@ import os
 from dotenv import load_dotenv
 from urllib.parse import urlparse
 
-load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+$(joou^!su$(4&u*ox#9#$l7^j3&&3lyjhm8g9p)vo(wnt88y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-VERCEL_ENV = os.getenv('VERCEL', '0') == '1'
+VERCEL_ENV = os.environ.get('VERCEL') == '1'
 DEBUG = not VERCEL_ENV
 
 ALLOWED_HOSTS = [
@@ -60,7 +60,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
