@@ -1,6 +1,5 @@
-Django
-psycopg2-binary  # For PostgreSQL support
-gunicorn         # For running Django on Vercel
-
-psycopg2-binary
-python-dotenv  # Only for local development
+Django==5.2
+psycopg2-binary==2.9.9
+gunicorn==21.2.0
+whitenoise==6.6.0
+python-dotenv==1.0.0

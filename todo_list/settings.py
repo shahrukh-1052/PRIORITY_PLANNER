@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 
 import os
-from dotenv import load_dotenv
 from urllib.parse import urlparse
 
 load_dotenv()
@@ -29,9 +28,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+$(joou^!su$(4&u*ox#9#$l7^j3&&3lyjhm8g9p)vo(wnt88y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = not VERCEL_ENV
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '.vercel.app'  # Allow all Vercel subdomains
+]
 
 
 # Application definition
@@ -44,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'base.apps.BaseConfig',
+    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
@@ -54,6 +58,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'todo_list.urls'
@@ -87,23 +93,22 @@ DATABASES = {
     }
 }
 '''
-tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
-
-DATABASE_URL = os.getenv('DATABASE_URL')  # Get from Vercel environment variables
-if DATABASE_URL:
+# Database Configuration (Improved) 🛠️
+DATABASE_URL = os.getenv('DATABASE_URL')
+if DATABASE_URL and VERCEL_ENV:  # 🛠️ Only use Postgres on Vercel
     db_info = urlparse(DATABASE_URL)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': db_info.path[1:],  # Remove leading slash
+            'NAME': db_info.path[1:],
             'USER': db_info.username,
             'PASSWORD': db_info.password,
             'HOST': db_info.hostname,
             'PORT': db_info.port or 5432,
-            'OPTIONS': {'sslmode': 'require'},
+            'OPTIONS': {'sslmode': 'require', 'connect_timeout': 5},
         }
     }
-else:
+else:  # 🛠️ Use SQLite locally
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -145,7 +150,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 LOGIN_URL = 'login'
 

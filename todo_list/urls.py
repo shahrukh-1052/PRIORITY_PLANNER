@@ -16,8 +16,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.http import HttpResponse
+from django.views.decorators.http import require_GET
+
+
+
+@require_GET
+def run_migrations(request):
+    from django.core.management import call_command
+    call_command('migrate', '--noinput')
+    return HttpResponse("Migrations executed successfully")
+
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('base.urls')),
+    path('__migrate__/', run_migrations),
 ]
