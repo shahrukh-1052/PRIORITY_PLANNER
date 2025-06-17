@@ -58,3 +58,7 @@ ucb==0.0.1a0
 urllib3==2.3.0
 whitenoise==6.9.0
 zstandard==0.23.0
+gunicorn
+whitenoise
+dj-database-url
+python-dotenv
