@@ -12,9 +12,9 @@
 
 ## 🌟 Overview
 
-> **Priority Planner** is a full-stack task management web application that helps users organize, prioritize, and track their goals with a clean and minimalist interface.
+> **Priority Planner** is a dynamic and minimalistic task management web application designed for productivity-focused users. It allows you to organize tasks, set due dates, assign priorities, and stay in control of your schedule.
 
-This project is built using **Django** and deployed on **Render** with PostgreSQL as the database in production. It includes a secure authentication system, mobile-friendly UI, and cloud-hosted database connectivity.
+This project is built using **Django 5.2** and deployed on **Render** using **PostgreSQL** for cloud production. It features an intuitive interface, robust authentication, and seamless deployment support.
 
 ---
 
@@ -22,7 +22,7 @@ This project is built using **Django** and deployed on **Render** with PostgreSQ
 
 <p align="center">
   <a href="https://priority-planner.onrender.com/" target="_blank">
-    <img src="https://img.shields.io/badge/-Click to View 🔗-000?style=for-the-badge&logo=render&logoColor=white" />
+    <img src="https://img.shields.io/badge/-🌐 View Deployed App-0D1117?style=for-the-badge&logo=render&logoColor=white" />
   </a>
 </p>
 
@@ -30,13 +30,14 @@ This project is built using **Django** and deployed on **Render** with PostgreSQ
 
 ## 🔥 Features
 
-- 🔐 User authentication system (Login / Register / Logout)
-- ✅ Add, edit, and delete tasks
-- 📝 Organize tasks based on priority
-- 📅 Due date selection and sorting
-- 🌈 Responsive and clean UI
-- 📦 Cloud PostgreSQL integration
-- 🌐 Deployed on Render with production-grade settings
+- 🔐 Secure User Authentication (Register / Login / Logout)
+- 📌 Add, Update, Delete Tasks
+- 🏷️ Set Task Priority (High, Medium, Low)
+- 🗓️ Assign Due Dates and Sort by Deadlines
+- 🧹 Clean and Responsive UI for all devices
+- 💾 PostgreSQL Database (on production), SQLite (for dev)
+- 🛡️ Environment-secure config via `.env`
+- ⚙️ Static files managed by WhiteNoise for production
 
 ---
 
@@ -44,18 +45,48 @@ This project is built using **Django** and deployed on **Render** with PostgreSQ
 
 | Layer         | Technology                            |
 |---------------|----------------------------------------|
-| Frontend      | HTML5, CSS3, Bootstrap (minimal usage) |
-| Backend       | Python, Django 5.2                     |
-| Database      | SQLite (local), PostgreSQL (cloud)     |
-| Deployment    | Render.com                             |
-| Static Files  | WhiteNoise                             |
-| Environment   | python-dotenv                          |
+| 💻 Frontend      | HTML5, CSS3, Bootstrap (light)         |
+| 🐍 Backend       | Python 3.11, Django 5.2                |
+| 🛢️ Database      | SQLite (local), PostgreSQL (cloud)     |
+| ☁️ Deployment    | Render.com                             |
+| 🧊 Static Files  | WhiteNoise                             |
+| 🔐 Env Manager   | python-dotenv                          |
 
 ---
 
-## 📸 Screenshots
+## ⚙️ Local Development Setup
 
-> _Add your screenshots here in the future_
+Follow these steps to run this project locally.
+
+### ✅ Requirements
+- Python 3.10+
+- Git
+- pip / pipenv / poetry
+- PostgreSQL (optional for local DB testing)
+
+### 🛠️ Installation
 
 ```bash
-📌 Coming Soon!
+# 1. Clone the repository
+git clone https://github.com/shahrukh-1052/PRIORITY_PLANNER.git
+cd PRIORITY_PLANNER
+
+# 2. Create a virtual environment
+python -m venv venv
+source venv/bin/activate  # or .\venv\Scripts\activate on Windows
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Setup environment variables
+touch .env
+# Add the following:
+# SECRET_KEY=your-secret-key
+# DEBUG=True
+# DATABASE_URL=your-postgres-url (optional)
+
+# 5. Run migrations
+python manage.py migrate
+
+# 6. Start development server
+python manage.py runserver
