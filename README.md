@@ -1,12 +1,13 @@
 <h1 align="center">🗓️ PRIORITY PLANNER</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Django-5.2-darkgreen?style=flat-square&logo=django" alt="Django" />
-  <img src="https://img.shields.io/badge/Render-Hosted-blue?style=flat-square&logo=render" alt="Render" />
-  <img src="https://img.shields.io/badge/Python-3.11-blue?style=flat-square&logo=python" alt="Python" />
-  <img src="https://img.shields.io/badge/PostgreSQL-Cloud_DB-critical?style=flat-square&logo=postgresql" alt="PostgreSQL" />
-  <img src="https://img.shields.io/github/license/shahrukh-1052/PRIORITY_PLANNER?style=flat-square" alt="License" />
+  <img src="https://img.shields.io/badge/Django-5.2-darkgreen?style=for-the-badge&logo=django" alt="Django" />
+  <img src="https://img.shields.io/badge/Render-Hosted-blue?style=for-the-badge&logo=render" alt="Render" />
+  <img src="https://img.shields.io/badge/Python-3.11-blue?style=for-the-badge&logo=python" alt="Python" />
+  <img src="https://img.shields.io/badge/PostgreSQL-Cloud_DB-critical?style=for-the-badge&logo=postgresql" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/License-MIT-informational?style=for-the-badge&logo=github" alt="License" />
 </p>
+
 
 ---
 
@@ -61,7 +62,7 @@ This project is built using **Django** and deployed on **Render** with PostgreSQ
   <a href="https://www.linkedin.com/in/mohammed-habeebuddin/" target="_blank">
     <img src="https://img.shields.io/badge/-LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" />
   </a>
-  <a href="mailto:yourmail@example.com" target="_blank">
+  <a href="mailto:mohammedhabeebuddin79@gmail.com" target="_blank">
     <img src="https://img.shields.io/badge/-Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" />
   </a>
 </p>
