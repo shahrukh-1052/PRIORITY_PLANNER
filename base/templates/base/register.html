@@ -4,101 +4,128 @@
 {% block content %}
 <style>
     .form-box {
-        max-width: 400px;
+        max-width: 440px;
         margin: 40px auto;
-    }
-    .form-box h2 {
-        text-align: center;
-        color: #007c91;
-    }
-    form {
-        display: flex;
-        flex-direction: column;
-    }
-    input[type="text"],
-    input[type="password"] {
-        padding: 12px;
-        border: 1px solid #ccc;
+        padding: 20px;
+        background: #fff;
         border-radius: 8px;
-        margin: 8px 0 16px;
-        width: 100%;
-        box-sizing: border-box;
-        font-size: 16px;
-        position: relative;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.04);
     }
+    .form-box h2 { text-align: center; color: #007c91; margin-bottom: 18px; }
+    form { display: flex; flex-direction: column; gap: 8px; }
+    label { font-size: 14px; color: #333; margin-top: 6px; }
+    input[type="text"], input[type="password"], input[type="email"] {
+        padding: 12px; border: 1px solid #ddd; border-radius: 8px;
+        width: 100%; box-sizing: border-box; font-size: 15px;
+    }
+    .input-group { position: relative; }
     .password-toggle {
-        position: absolute;
-        right: 14px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: none;
-        border: none;
-        cursor: pointer;
-        font-size: 14px;
-        color: #007c91;
-    }
-    .input-group {
-        position: relative;
+        position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+        background: none; border: none; cursor: pointer; font-size: 13px; color: #007c91;
     }
     button[type="submit"] {
-        padding: 12px;
-        background-color: #00bcd4;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        cursor: pointer;
+        margin-top: 10px; padding: 12px; background-color: #00bcd4; color: #fff;
+        border: none; border-radius: 8px; font-size: 16px; cursor: pointer;
     }
-    button[type="submit"]:hover {
-        background-color: #008ba3;
-    }
-    .errorlist {
-        color: #c62828;
-        margin: 0 0 10px;
-        list-style: none;
-        padding: 0;
-    }
+    button[type="submit"]:hover { background-color: #008ba3; }
+
+    /* field error small text */
+    .field-error { color: #c62828; font-size: 13px; margin-top: 4px; }
+
+    /* message box (placed inside form, just before submit) */
+    .form-message { margin-top: 8px; margin-bottom: 6px; padding: 10px; border-radius: 6px; text-align: center; font-size: 14px; }
+    .form-message.success { background: #e6ffef; color: #0b6b3a; border: 1px solid #c7f0d3; }
+    .form-message.error { background: #fff1f0; color: #7a1919; border: 1px solid #f5c2c2; }
+
+    /* Prevent global messages from base template showing twice (if base renders them) */
+    .global-messages { display: none; }
 </style>
 
 <div class="form-box">
     <h2>Create Account</h2>
-    <form method="POST">
+
+    <form method="POST" novalidate>
         {% csrf_token %}
-        
-        {{ form.non_field_errors }}
 
-        <label>Username</label>
-        {{ form.username.errors }}
+        {# Non-field form errors (e.g., password mismatch) shown at top of form #}
+        {% if form.non_field_errors %}
+            <ul class="errorlist">
+                {% for err in form.non_field_errors %}
+                    <li class="field-error">{{ err }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <label for="{{ form.username.id_for_label }}">Username</label>
         {{ form.username }}
+        {% if form.username.errors %}
+            <div class="field-error">{{ form.username.errors.0 }}</div>
+        {% endif %}
 
-        <label>Password</label>
-        {{ form.password1.errors }}
+        {# Optional: email field if present in your form; remove if not used #}
+        {% if form.email %}
+            <label for="{{ form.email.id_for_label }}">Email</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <div class="field-error">{{ form.email.errors.0 }}</div>
+            {% endif %}
+        {% endif %}
+
+        <label for="{{ form.password1.id_for_label }}">Password</label>
         <div class="input-group">
             {{ form.password1 }}
             <button class="password-toggle" type="button" onclick="togglePassword(this)">Show</button>
         </div>
+        {% if form.password1.errors %}
+            <div class="field-error">{{ form.password1.errors.0 }}</div>
+        {% endif %}
 
-        <label>Confirm Password</label>
-        {{ form.password2.errors }}
+        <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
         <div class="input-group">
             {{ form.password2 }}
             <button class="password-toggle" type="button" onclick="togglePassword(this)">Show</button>
         </div>
+        {% if form.password2.errors %}
+            <div class="field-error">{{ form.password2.errors.0 }}</div>
+        {% endif %}
+
+        {# ===== Messages placed INSIDE the form, just before the Register button ===== #}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="form-message {{ message.tags|default:'info' }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {# ================================================================ #}
 
         <button type="submit">Register</button>
     </form>
-    <p style="text-align:center; margin-top:15px;">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+
+    <p style="text-align:center; margin-top:12px;">
+        Already have an account? <a href="{% url 'login' %}">Login</a>
+    </p>
+</div>
+
+{# hide any global messages that may be rendered by base.html to avoid duplicates #}
+<div class="global-messages" aria-hidden="true">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="hidden-message {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
 </div>
 
 <script>
-    function togglePassword(button) {
-        const input = button.previousElementSibling;
+    function togglePassword(btn) {
+        const input = btn.parentElement.querySelector('input');
+        if (!input) return;
         if (input.type === 'password') {
             input.type = 'text';
-            button.textContent = 'Hide';
+            btn.textContent = 'Hide';
         } else {
             input.type = 'password';
-            button.textContent = 'Show';
+            btn.textContent = 'Show';
         }
     }
 </script>

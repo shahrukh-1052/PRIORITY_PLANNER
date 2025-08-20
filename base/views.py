@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
@@ -7,14 +7,15 @@ from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+from django.views.generic.edit import FormView
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login
 
-from django.contrib import messages
-from django.contrib.auth import authenticate, login
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import AuthenticationForm
-
 from .models import Task
+
 
 def custom_login(request):
     if request.method == 'POST':
@@ -22,10 +23,7 @@ def custom_login(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            messages.success(request, f"Welcome back, {user.username}!")  # ✅ Flash message
-            return redirect('tasks')  # ✅ Make sure 'tasks' URL is named correctly
-        else:
-            messages.error(request, "Invalid username or password.")
+            return redirect('tasks')
     else:
         form = AuthenticationForm()
     return render(request, 'base/login.html', {'form': form})
@@ -38,23 +36,27 @@ class CustomLoginView(LoginView):
 
     def get_success_url(self):
         return reverse_lazy('tasks')
-    
+
+
 class RegisterPage(FormView):
     template_name = 'base/register.html'
     form_class = UserCreationForm
-    redirect_authenticated_user = True
     success_url = reverse_lazy('tasks')
 
     def form_valid(self, form):
+        # Save the user
         user = form.save()
-        if user is not None:
-            login(self.request, user)
-        return super(RegisterPage, self).form_valid(form)
+        # Add a success message
+        messages.success(self.request, "Registration successful. You can now log in.")
+        # Redirect back to the register page (GET) so the message can be shown inside the form
+        return redirect('register')
 
+    # keep form_invalid default (field errors will be shown under fields)
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
             return redirect('tasks')
-        return super(RegisterPage, self).get(*args, **kwargs)
+        return super().get(*args, **kwargs)
+
 
 class TaskList(LoginRequiredMixin, ListView):
     model = Task
@@ -70,29 +72,28 @@ class TaskList(LoginRequiredMixin, ListView):
         context['search_input'] = search_input
         return context
 
-    
 
 class TaskDetail(LoginRequiredMixin, DetailView):
     model = Task
     context_object_name = 'task'
     template_name = 'base/task.html'
 
+
 class TaskCreate(LoginRequiredMixin, CreateView):
     model = Task
-    fields = ['title','description','complete']
+    fields = ['title', 'description', 'complete']
     success_url = reverse_lazy('tasks')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        return super(TaskCreate,self).form_valid(form)
-    
+        return super(TaskCreate, self).form_valid(form)
+
+
 class TaskUpdate(LoginRequiredMixin, UpdateView):
     model = Task
-    fields = ['title','description','complete']
+    fields = ['title', 'description', 'complete']
     success_url = reverse_lazy('tasks')
 
-    
-    
 
 class DeleteView(LoginRequiredMixin, DeleteView):
     model = Task
